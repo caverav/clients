@@ -33,12 +33,12 @@ const focusRing = [
 const inactiveStyles = [
   "disabled:tw-bg-bg-disabled",
   "disabled:tw-border-border-base",
-  "disabled:tw-text-fg-disabled",
+  "disabled:tw-text-fg-inactive",
   "disabled:hover:tw-bg-bg-disabled",
   "disabled:tw-pointer-events-none",
   "aria-disabled:tw-bg-bg-disabled",
   "aria-disabled:tw-border-border-base",
-  "aria-disabled:tw-text-fg-disabled",
+  "aria-disabled:tw-text-fg-inactive",
   "aria-disabled:hover:tw-bg-bg-disabled",
   "aria-disabled:tw-pointer-events-none",
 ];
