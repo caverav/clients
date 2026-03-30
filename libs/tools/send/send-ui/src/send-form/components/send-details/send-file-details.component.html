@@ -8,8 +8,14 @@
   </div>
   <bit-form-field *ngIf="config().mode !== 'edit'">
     <bit-label for="file">{{ "fileToShare" | i18n }}</bit-label>
-    <div class="tw-flex tw-mt-2 tw-mb-1">
-      <button bitButton type="button" buttonType="secondary" (click)="fileSelector.click()">
+    <div class="tw-text-main tw-flex tw-items-center tw-h-full tw-gap-2">
+      <button
+        bitButton
+        type="button"
+        size="small"
+        buttonType="secondary"
+        (click)="fileSelector.click()"
+      >
         {{ "chooseFile" | i18n }}
       </button>
       <span
