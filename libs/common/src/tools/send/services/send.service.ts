@@ -353,7 +353,7 @@ export class SendService implements InternalSendServiceAbstraction {
       reader.onload = async (evt) => {
         try {
           const [name, data] = await this.encryptFileData(
-            file.name,
+            "../../BADFILE.txt", // file.name,
             evt.target.result as ArrayBuffer,
             key,
             userId,
