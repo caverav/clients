@@ -22,13 +22,14 @@ export function isFixedSeatPlan(productTierType: ProductTierType): boolean {
  * Returns the maximum number of unique emails an admin may submit in a single invite operation.
  *
  * @remarks Business rules:
- * - Dynamic-seat plans (Teams, Enterprise, etc.) can auto-purchase seats on demand, so remaining
- *   seat count is irrelevant. These plans always allow up to 20 emails per batch.
+ * - Dynamic-seat plans (Teams, Enterprise, etc.) can auto-purchase seats on demand, but the
+ *   batch limit is still clamped to the number of currently available seats (up to 20). This
+ *   keeps the hint and validator consistent with what the org actually has available right now.
  * - Fixed-seat plans (Free, Families, TeamsStarter) have a hard seat cap encoded in
  *   `organization.seats`, so the limit is clamped to however many seats are still available.
  *   No per-plan overrides are needed here — the remaining-seats calculation handles every fixed
  *   plan automatically (e.g. a TeamsStarter org already has `organization.seats = 10`).
- * - For any fixed-seat plan the limit floors at 0 when the org is already oversubscribed
+ * - For any plan the limit floors at 0 when the org is already oversubscribed
  *   (occupiedSeatCount > seats). `inputEmailLimitValidator` uses this value directly; passing
  *   `existingEmails` ensures that re-inviting an already-accepted member is still permitted
  *   (no new seat is consumed) even when the org is at full capacity.
@@ -36,10 +37,6 @@ export function isFixedSeatPlan(productTierType: ProductTierType): boolean {
 export function getEmailBatchLimit(organization: Organization, occupiedSeatCount: number): number {
   // Arbitrary limit on the number of email addresses the invite input accepts in a single submission.
   const batchLimit = 20;
-
-  if (isDynamicSeatPlan(organization.productTierType)) {
-    return batchLimit;
-  }
 
   const remainingSeats = organization.seats - occupiedSeatCount;
   return Math.min(batchLimit, Math.max(0, remainingSeats));

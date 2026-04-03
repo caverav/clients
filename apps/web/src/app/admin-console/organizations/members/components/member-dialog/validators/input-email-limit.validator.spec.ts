@@ -176,12 +176,23 @@ describe("inputEmailLimitValidator", () => {
 
 describe("getEmailBatchLimit", () => {
   describe("dynamic-seat plan", () => {
-    it("returns 20 regardless of occupied seat count", () => {
+    it("returns 20 when remaining seats exceed the batch limit", () => {
       const organization = orgFactory({ productTierType: ProductTierType.Teams, seats: 100 });
 
       expect(getEmailBatchLimit(organization, 0)).toBe(20);
-      expect(getEmailBatchLimit(organization, 99)).toBe(20);
-      expect(getEmailBatchLimit(organization, 150)).toBe(20);
+    });
+
+    it("returns remaining seats when below the batch limit", () => {
+      const organization = orgFactory({ productTierType: ProductTierType.Teams, seats: 14 });
+
+      expect(getEmailBatchLimit(organization, 0)).toBe(14);
+    });
+
+    it("returns 0 when oversubscribed", () => {
+      const organization = orgFactory({ productTierType: ProductTierType.Teams, seats: 14 });
+
+      expect(getEmailBatchLimit(organization, 14)).toBe(0);
+      expect(getEmailBatchLimit(organization, 20)).toBe(0);
     });
   });
 
